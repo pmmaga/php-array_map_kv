@@ -1,5 +1,5 @@
 --TEST--
-array_map_kv_test1() Basic test
+array_map_kv() Basic test
 --SKIPIF--
 <?php
 if (!extension_loaded('array_map_kv')) {
@@ -8,9 +8,11 @@ if (!extension_loaded('array_map_kv')) {
 ?>
 --FILE--
 <?php 
-$ret = array_map_kv();
+array_map_kv('var_dump', [0, 1]);
 
-var_dump($ret);
 ?>
 --EXPECT--
-NULL
+int(0)
+int(0)
+int(1)
+int(1)
