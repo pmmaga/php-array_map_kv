@@ -1,0 +1,7 @@
+ARG_ENABLE('array_map_kv', 'array_map_kv support', 'no');
+
+if (PHP_ARRAY_MAP_KV != 'no') {
+	AC_DEFINE('HAVE_ARRAY_MAP_KV', 1, 'array_map_kv support enabled');
+
+	EXTENSION('array_map_kv', 'array_map_kv.c', null, '/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1');
+}
