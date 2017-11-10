@@ -1,4 +1,5 @@
 # array_map_kv
+[![Build Status](https://travis-ci.org/pmmaga/php-array_map_kv.svg?branch=master)](https://travis-ci.org/pmmaga/php-array_map_kv)
 
 The `array_map_kv` function is equivalent to the regular `array_map` function except that it passes both the key and the value of each element of the array to the given callback.
 
@@ -6,7 +7,6 @@ The signature of the function is also the same:
 ```
 array array_map_kv ( callable $callback , array $array1 [, array $... ] )
 ```
-
 ### Why?
 
 It results in the same as using `array_map(function($k, $v) {}, array_keys($arr), $arr);` without having to create a temporary array to hold the keys.
