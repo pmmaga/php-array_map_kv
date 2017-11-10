@@ -43,14 +43,14 @@ PHP_FUNCTION(array_map_kv)
 	array_init_size(return_value, maxlen);
 
 	if (!ZEND_FCI_INITIALIZED(fci)) {
-		zval zv;
+		zval key, zv;
 
 		/* We iterate through all the arrays at once. */
 		for (k = 0; k < maxlen; k++) {
 
 			/* If no callback, the result will be an array, consisting of current
 			* entries from all arrays. */
-			array_init_size(&result, n_arrays);
+			array_init_size(&result, n_arrays * 2);
 
 			for (i = 0; i < n_arrays; i++) {
 				/* If this array still has elements, add the current one to the
@@ -58,9 +58,15 @@ PHP_FUNCTION(array_map_kv)
 				uint32_t pos = array_pos[i];
 				while (1) {
 					if (pos >= Z_ARRVAL(arrays[i])->nNumUsed) {
+						ZVAL_NULL(&key);
 						ZVAL_NULL(&zv);
 						break;
 					} else if (Z_TYPE(Z_ARRVAL(arrays[i])->arData[pos].val) != IS_UNDEF) {
+						if (Z_ARRVAL(arrays[i])->arData[pos].key) {
+							ZVAL_STR_COPY(&key, Z_ARRVAL(arrays[i])->arData[pos].key);
+						} else {
+							ZVAL_LONG(&key, Z_ARRVAL(arrays[i])->arData[pos].h)
+						}
 						ZVAL_COPY(&zv, &Z_ARRVAL(arrays[i])->arData[pos].val);
 						array_pos[i] = pos + 1;
 						break;
@@ -68,6 +74,7 @@ PHP_FUNCTION(array_map_kv)
 					pos++;
 				}
 
+				zend_hash_next_index_insert_new(Z_ARRVAL(result), &key);
 				zend_hash_next_index_insert_new(Z_ARRVAL(result), &zv);
 			}
 
